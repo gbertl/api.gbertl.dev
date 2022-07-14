@@ -3,35 +3,23 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
+const projectsRouter = require('./routes/projects');
+const categoriesRouter = require('./routes/categories');
+const screenshotsRouter = require('./routes/screenshots');
+const technologiesRouter = require('./routes/technologies');
+
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.CONNECTION_URL);
 
-const projectSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-});
+app.use('/projects', projectsRouter);
+app.use('/categories', categoriesRouter);
+app.use('/screenshots', screenshotsRouter);
+app.use('/technologies', technologiesRouter);
 
-const Project = mongoose.model('Project', projectSchema);
-
-app.get('/projects', async (req, res) => {
-  const projects = await Project.find();
-  res.json(projects);
-});
-
-app.post('/projects', async (req, res) => {
-  try {
-    const project = await Project.create(req.body);
-    res.status(201).json(project);
-  } catch (e) {
-    res.json({ error: e.message });
-  }
-});
-
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => console.log(`Server started at ${PORT}`));
