@@ -4,6 +4,7 @@ const projectSchema = new mongoose.Schema({
   title: String,
   description: String,
   livePreview: String,
+  sourceCode: String,
   priorityOrder: String,
   technologies: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Technology' }],
   categories: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Category' }],
