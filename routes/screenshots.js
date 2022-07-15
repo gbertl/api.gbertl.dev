@@ -37,10 +37,19 @@ router
   .post(upload.single('image'), async (req, res) => {
     const body = { ...req.body };
     body.image = req.file.location;
-    body.priorityOrder = await generatePriorityOrder(Screenshot);
+
+    const count = await Screenshot.countDocuments({ project: body.project });
+    body.priorityOrder = count + 1;
 
     const screenshot = await Screenshot.create(body);
     res.status(201).json(screenshot);
   });
 
+router.delete('/:id', async (req, res) => {
+  const screenshot = await Screenshot.findByIdAndDelete(req.params.id)
+  res.json(screenshot)
+})
+
 module.exports = router;
+
+

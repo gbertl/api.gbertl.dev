@@ -18,8 +18,3 @@ exports.authenticateToken = (req, res, next) => {
     next();
   });
 };
-
-exports.generatePriorityOrder = async (model) => {
-  const count = await model.estimatedDocumentCount();
-  return Promise.resolve(count + 1);
-};
