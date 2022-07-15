@@ -5,6 +5,7 @@ const { S3Client } = require('@aws-sdk/client-s3');
 const multerS3 = require('multer-s3');
 
 const Screenshot = require('../models/Screenshot');
+const { generatePriorityOrder } = require('../utils');
 
 const s3 = new S3Client();
 
@@ -24,21 +25,21 @@ const upload = multer({
 router
   .route('/')
   .get(async (req, res) => {
-    let screenshots;
+    let query = Screenshot.find();
 
-    if (req.query.ids) {
-      screenshots = await Screenshot.find({ _id: req.query.ids });
-    } else {
-      screenshots = await Screenshot.find();
-    }
+    if (req.query.ids) query = query.where({ _id: req.query.ids });
+    if (req.query.ordering) query = query.sort(req.query.ordering.join(' '));
+
+    const screenshots = await query;
 
     res.json(screenshots);
   })
   .post(upload.single('image'), async (req, res) => {
-    const screenshot = await Screenshot.create({
-      ...req.body,
-      image: req.file.location,
-    });
+    const body = { ...req.body };
+    body.image = req.file.location;
+    body.priorityOrder = await generatePriorityOrder(Screenshot);
+
+    const screenshot = await Screenshot.create(body);
     res.status(201).json(screenshot);
   });
 
