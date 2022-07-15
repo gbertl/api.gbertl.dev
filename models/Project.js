@@ -1,14 +1,8 @@
 const mongoose = require('mongoose');
 
 const projectSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
+  title: String,
+  description: String,
   livePreview: String,
   priorityOrder: String,
   technologies: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Technology' }],
