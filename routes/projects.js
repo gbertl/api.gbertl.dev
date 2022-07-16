@@ -14,6 +14,7 @@ router
         query = query.populate(p);
       });
     }
+    if (req.query.selects) query = query.select(req.query.selects.join(' '));
 
     const projects = await query;
     res.json(projects);
