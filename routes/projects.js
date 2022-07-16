@@ -6,7 +6,16 @@ const Project = require('../models/Project');
 router
   .route('/')
   .get(async (req, res) => {
-    const projects = await Project.find();
+    let query = Project.find();
+
+    if (req.query.ordering) query = query.sort(req.query.ordering.join(' '));
+    if (req.query.populating) {
+      req.query.populating.forEach((p) => {
+        query = query.populate(p);
+      });
+    }
+
+    const projects = await query;
     res.json(projects);
   })
   .post(async (req, res) => {
@@ -38,7 +47,15 @@ router
 router
   .route('/:id')
   .get(async (req, res) => {
-    const project = await Project.findById(req.params.id);
+    let query = Project.findById(req.params.id);
+
+    if (req.query.populating) {
+      req.query.populating.forEach((p) => {
+        query = query.populate(p);
+      });
+    }
+
+    const project = await query;
     res.json(project);
   })
   .put(async (req, res) => {

@@ -6,14 +6,12 @@ const router = express.Router();
 router
   .route('/')
   .get(async (req, res) => {
-    let categories;
+    let query = Category.find();
 
-    if (req.query.ids) {
-      categories = await Category.find({ _id: req.query.ids });
-    } else {
-      categories = await Category.find();
-    }
+    if (req.query.ids) query = query.where({ _id: req.query.ids });
+    if (req.query.ordering) query = query.sort(req.query.ordering.join(' '));
 
+    const categories = await query;
     res.json(categories);
   })
   .post(async (req, res) => {

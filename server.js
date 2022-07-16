@@ -16,7 +16,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.CONNECTION_URL);
+mongoose.connect(process.env.CONNECTION_URL, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+});
 
 app.use('/token', tokenRouter);
 
