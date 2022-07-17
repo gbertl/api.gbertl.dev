@@ -6,14 +6,9 @@ const router = express.Router();
 router
   .route('/')
   .get(async (req, res) => {
-    let technologies;
-
-    if (req.query.ids) {
-      technologies = await Technology.find({ _id: req.query.ids });
-    } else {
-      technologies = await Technology.find();
-    }
-
+    let query = Technology.find();
+    if (req.query.ids) query = query.where({ _id: req.query.ids });
+    const technologies = await query;
     res.json(technologies);
   })
   .post(async (req, res) => {
