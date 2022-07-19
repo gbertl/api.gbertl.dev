@@ -9,6 +9,7 @@ const projectSchema = new mongoose.Schema({
   technologies: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Technology' }],
   categories: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Category' }],
   screenshots: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'Screenshot' }],
+  type: String,
 });
 
 module.exports = mongoose.model('Project', projectSchema);

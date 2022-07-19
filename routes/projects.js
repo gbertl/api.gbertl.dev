@@ -15,6 +15,7 @@ router
       });
     }
     if (req.query.selects) query = query.select(req.query.selects.join(' '));
+    if (req.query.type) query = query.where({ type: req.query.type });
 
     const projects = await query;
     res.json(projects);
